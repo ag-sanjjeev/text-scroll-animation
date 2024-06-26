@@ -1,135 +1,150 @@
+<!--
+  ______________________________________________________________________________________________
+ |                                                                                              |
+ |  Copyright 2024 ag-sanjjeev                                                                  |
+ |                                                                                              |
+ |  The source code is licensed under MIT-style License.                                        |
+ |  The usage, permission and condition are applicable to this source code as per license.      |
+ |  That can be found in LICENSE file or at https://opensource.org/licenses/MIT.                |
+ |______________________________________________________________________________________________|
+
+-->
+
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css" integrity="sha512-usVBAd66/NpVNfBge19gws2j6JZinnca12rAe2l+d+QkLU9fiG02O1X8Q6hepIpr/EYKZvKx/I9WsnujJuOmBA==" crossorigin="anonymous" referrerpolicy="no-referrer" media="all" />
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" media="all" />
+
+	<!-- <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="../icons/fontawesome/css/all.css" media="all" />
+	 -->
+
 	<link rel="stylesheet" type="text/css" href="./main.css" media="all" />
 	<title>Text Scroll</title>
 </head>
 <body>
 
-	<fieldset>
-		<legend>Text Scroll Setting</legend>
-		<!-- Setting Container -->
-		<div class="setting-container">
-			<div class="input-container">
-				<!-- Text input -->
-				<div class="text-input-container">
-					<label for="inputText">Input Text</label>
-					<textarea name="inputText" id="inputText" placeholder="Enter the text" rows="7">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. 
-
-
-Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
-				</div>
-
-				<div class="second-section-setting">
+	<div class="container-fluid">
+		
+		<div class="row flex-column">
+			
+			<div class="col">
+				
+				<form action="#" onsubmit="return false;" class="row flex-column">
 					
-					<!-- Canvas dimension -->
-					<div class="canvas-dimension-container">
+					<div class="col form-group mb-3">
+						<label for="inputText">Input Text</label>
+						<textarea name="inputText" id="inputText" class="form-control" placeholder="Enter the text" rows="7" autofocus>
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+						</textarea>
+					</div>
+
+					<div class="col row">
 						<!-- Canvas width -->
-						<div class="canvas-width-input-container">
+						<div class="col-md-2 form-group mb-3">
 							<label for="canvasWidth">Width</label>
-							<input type="number" name="canvasWidth" id="canvasWidth" min="100" value="774" />
+							<input type="number" name="canvasWidth" id="canvasWidth" class="form-control" min="100" value="774" />
 						</div>
 
 						<!-- Canvas Height -->
-						<div class="canvas-height-input-container">
+						<div class="col-md-2 form-group mb-3">
 							<label for="canvasHeight">Height</label>
-							<input type="number" name="canvasHeight" id="canvasHeight" min="100" value="1376" />
+							<input type="number" name="canvasHeight" id="canvasHeight" class="form-control" min="100" value="1376" />
 						</div>
+
+						<!-- Horizontal Padding -->
+						<div class="col-md-2 form-group mb-3">
+							<label for="paddingX">Horizontal Padding</label>
+							<input type="number" name="paddingX" id="paddingX" class="form-control" min="0" value="100" />
+						</div>
+
+						<!-- Vertical Padding -->
+						<div class="col-md-2 form-group mb-3">
+							<label for="paddingY">Vertical Padding</label>
+							<input type="number" name="paddingY" id="paddingY" class="form-control" min="0" value="100" />
+						</div>
+
+						<!-- Line Height -->
+						<div class="col-md-2 form-group mb-3">
+							<label for="lineHeight">Line Height</label>
+							<input type="number" name="lineHeight" id="lineHeight" class="form-control" min="1" value="10" />
+						</div>
+
+						<!-- font size -->
+						<div class="col-md-2 form-group mb-3">
+							<label for="fontSize">Font Size</label>
+							<input type="number" name="fontSize" id="fontSize" class="form-control" min="1" value="40" />
+						</div>
+
+						<!-- background color -->
+						<div class="col-md-2 form-group mb-3">
+							<label for="backgroundColor">Background Color</label>
+							<input type="color" name="backgroundColor" id="backgroundColor" class="form-control" value="#000000" />
+						</div>
+
+						<!-- text color -->
+						<div class="col-md-2 form-group mb-3">
+							<label for="textColor">Text Color</label>
+							<input type="color" name="textColor" id="textColor" class="form-control" value="#ffffff" />
+						</div>
+
+						<!-- fps -->
+						<div class="col-md-2 form-group mb-3">
+							<label for="fps">FPS</label>
+							<input type="number" name="fps" id="fps" class="form-control" min="10" value="30" />
+						</div>
+
+						<!-- Scroll Speed -->
+						<div class="col-md-2 form-group mb-3">
+							<label for="scrollSpeed">Scroll Speed</label>
+							<input type="number" name="scrollSpeed" id="scrollSpeed" class="form-control" min="0" value="3" />
+						</div>
+
+						<!-- Font Family -->
+						<div class="col-md-4 form-group mb-3">
+							<label for="textFontFamily">Text Font Family</label>
+							<div class="input-group mb-3">
+								<input type="text" name="textFontFamily" id="textFontFamily" class="form-control" value="Ysabeau Infant" placeholder="(e.g., 'Open Sans', 'Arial'):" />
+								<button class="btn btn-outline-primary my-0" type="button" id="setFontButton">Set Font</button>
+							</div>
+						</div>
+
+					</div>
+						
+					<!-- button container -->
+					<div class="col form-group text-center my-3">
+						<!-- Play Button -->
+						<button type="button" id="playButton" class="btn btn-success mx-2">Play</button>
+
+						<!-- Preview & Download -->
+						<button type="button" id="previewDownloadButton" class="btn btn-primary text-nowrap">Preview & Download</button>
 					</div>
 
-					<!-- Horizontal Padding -->
-					<div class="horizontal-padding-input-container">
-						<label for="paddingX">Horizontal Padding</label>
-						<input type="number" name="paddingX" id="paddingX" min="0" value="100" />
-					</div>
+				</form>
 
-					<!-- Vertical Padding -->
-					<div class="vertical-padding-input-container">
-						<label for="paddingY">Vertical Padding</label>
-						<input type="number" name="paddingY" id="paddingY" min="0" value="100" />
-					</div>
+			</div>
 
-					<!-- Line Height -->
-					<div class="line-height-input-container">
-						<label for="lineHeight">Line Height</label>
-						<input type="number" name="lineHeight" id="lineHeight" min="1" value="10" />
-					</div>
-
-					<!-- font size -->
-					<div class="font-size-container">
-						<label for="fontSize">Font Size</label>
-						<input type="number" name="fontSize" id="fontSize" min="1" value="40" />
-					</div>
-
-					<!-- background color -->
-					<div class="background-color-container">
-						<label for="backgroundColor">Background Color</label>
-						<input type="color" name="backgroundColor" id="backgroundColor" value="#000000" />
-					</div>
-
-					<!-- text color -->
-					<div class="text-color-container">
-						<label for="textColor">Text Color</label>
-						<input type="color" name="textColor" id="textColor" value="#ffffff" />
-					</div>
-
-					<!-- fps -->
-					<div class="font-size-container">
-						<label for="fps">FPS</label>
-						<input type="number" name="fps" id="fps" min="10" value="30" />
-					</div>
-
-					<!-- Scroll Speed -->
-					<div class="scroll-speed-container">
-						<label for="scrollSpeed">Scroll Speed</label>
-						<input type="number" name="scrollSpeed" id="scrollSpeed" min="0" value="3" />
-					</div>
-
-				</div>
-				<!-- button container -->
-				<div class="button-container">
-					<!-- Play Button -->
-					<div class="play-button-container">
-						<button type="button" id="playButton">Play</button>
-					</div>
-
-					<!-- Preview & Download -->
-					<div class="previewDownload-button-container">
-						<button type="button" id="previewDownloadButton">Preview & Download</button>
-					</div>
+			<!-- Animation Container -->
+			<div class="col animation-container">
+				<div class="canvas-container my-3">
+					<canvas id="canvas1"></canvas>
 				</div>
 			</div>
+
 		</div>
 
-		<!-- Animation Container -->
-		<div class="animation-container">
-			<div class="canvas-container">
-				<canvas id="canvas1"></canvas>
-			</div>
-		</div>
-	</fieldset>
+	</div>
 	
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js" integrity="sha512-72WD92hLs7T5FAXn3vkNZflWG6pglUDDpm87TeQmfSg8KnrymL2G30R7as4FmTwhgu9H7eSzDCX3mjitSecKnw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	
+	<!-- <script type="text/javascript" src="../bootstrap/bootstrap.bundle.js"></script> -->
+
 	<script type="text/javascript" src="./main.js"></script>
 </body>
 </html>

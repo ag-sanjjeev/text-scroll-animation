@@ -1,3 +1,15 @@
+/*
+  ______________________________________________________________________________________________
+ |                                                                                              |
+ |  Copyright 2024 ag-sanjjeev                                                                  |
+ |                                                                                              |
+ |  The source code is licensed under MIT-style License.                                        |
+ |  The usage, permission and condition are applicable to this source code as per license.      |
+ |  That can be found in LICENSE file or at https://opensource.org/licenses/MIT.                |
+ |______________________________________________________________________________________________|
+
+*/
+
 /*================*/
 /* text scroll js */
 /*================*/
@@ -14,6 +26,8 @@ const lineHeight = document.getElementById('lineHeight');
 const fps = document.getElementById('fps');
 const backgroundColor = document.getElementById('backgroundColor');
 const textColor = document.getElementById('textColor');
+const textFontFamily = document.getElementById('textFontFamily');
+const setFontButton = document.getElementById('setFontButton');
 
 const playButton = document.getElementById('playButton');
 const previewDownloadButton = document.getElementById('previewDownloadButton');
@@ -35,8 +49,7 @@ class ScrollText {
 
 	// constructor method
 	constructor (inputText) {
-		this.inputText = inputText.split('\n');		
-		this.fontStyle = 'bold san-serif';
+		this.inputText = inputText.split('\n');
 		this.fontSize = fontSize.value;
 		this.scrollSpeed = scrollSpeed.value;
 		this.backgroundColor = backgroundColor.value;
@@ -44,6 +57,7 @@ class ScrollText {
 		this.paddingX = paddingX.value;
 		this.paddingY = paddingY.value;
 		this.lineHeight = lineHeight.value;
+		this.fontFamily = textFontFamily.value;
 
 		this.interval = 1000/fps.value;
 		this.lastTimeStamp = 0;
@@ -65,6 +79,9 @@ class ScrollText {
 	// scroll method
 	scroll(timeStamp) {				
 		
+		// setting default font if it is an empty
+		if (this.fontFamily == null || this.fontFamily == undefined) { this.fontFamily = 'Ysabeau Infant'; }		
+
 		// calculating delta time for uniform play in all other devices
 		const deltaTime = timeStamp - this.lastTimeStamp;
 
@@ -82,7 +99,7 @@ class ScrollText {
 			ctx.fillRect(0, 0, canvas.width, canvas.height);	
 
 			// setting font style
-			ctx.font = `${this.fontSize}px ${this.fontStyle}`;		
+			ctx.font = `${this.fontSize}px ${this.fontFamily}, san-serif`;		
 			
 			// setting initial y co-ordinate to be height of canvas			
 			this.y = this.currentY;
@@ -145,7 +162,7 @@ class ScrollText {
 		let lines = this.inputText;
 		
 		// assigning font style to calculate total width and height taken in the canvas
-		ctx.font = `${this.fontSize}px ${this.fontStyle}`;	
+		ctx.font = `${this.fontSize}px ${this.fontFamily}, san-serif`;	
 		
 		// created empty lines array to store new lines
 		let tempLines = [];
@@ -193,6 +210,7 @@ class PreferenceHandler {
 	constructor () {		
 		this.isAnimationPlaying = false;
 		this.object = null;
+		this.fontFamily = null;
 	}
 
 	// setAnimationObject method
@@ -214,15 +232,45 @@ class PreferenceHandler {
 	}
 }
 
+// initializing PreferenceHandler class object
+const preferenceObj = new PreferenceHandler();
+
+setFontButton.addEventListener('click', function() {
+  let fontFamily = textFontFamily.value.trim();
+
+  // Basic validation (optional)
+  if (!fontFamily) {
+    return; // Handle empty input
+  }
+
+  // Construct the Google Fonts URL based on user input
+  const fontUrl = `https://fonts.googleapis.com/css2?family=${fontFamily.replaceAll(' ', '+')}:wght@300;400;700&display=swap`;
+
+  const canvasFontLink = document.getElementById('canvasFontLink');
+
+  if (canvasFontLink == null || canvasFontLink == undefined) {
+	  // Create a new link element dynamically
+	  const link = document.createElement('link');
+	  link.href = fontUrl;
+	  link.id = 'canvasFontLink';
+	  link.rel = 'stylesheet';
+	  link.media = 'all';
+
+	  // Inject the link into the head of the document
+	  document.head.appendChild(link);
+  } else {
+  	canvasFontLink.href = fontUrl;
+  }
+
+  preferenceObj.fontFamily = fontFamily;
+
+});
+
 /* play button event listener */
 playButton.addEventListener('click', function(e) {
 	recorderState = null;
 	animateScroll();
 });
-
-// initializing PreferenceHandler class object
-const preferenceObj = new PreferenceHandler();
-
 
 /* preview and download button event listener */
 previewDownloadButton.addEventListener('click', function(e) {
