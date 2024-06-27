@@ -63,10 +63,10 @@ Contributions are welcome! If you have any suggestions, bug reports, or feature 
 
 ## &#9873; License
 
-This reference licensed under the [MIT license](LICENSE). Feel free to use, modify, and distribute it as per the terms of the license.
+This project licensed under the [MIT license](LICENSE). Feel free to use, modify, and distribute it as per the terms of the license.
 
 ## &#9873; Contact
 
 If you have any questions or need further assistance, please feel free to reach me at [Email](mailto:resulttext)
 
-Thanks for reviewing this reference notes!
+Thanks for reviewing this project!
