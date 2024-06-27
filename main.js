@@ -28,6 +28,8 @@ const backgroundColor = document.getElementById('backgroundColor');
 const textColor = document.getElementById('textColor');
 const textFontFamily = document.getElementById('textFontFamily');
 const setFontButton = document.getElementById('setFontButton');
+const fontStyle = document.getElementById('fontStyle');
+const textAlignment = document.getElementById('textAlignment');
 
 const playButton = document.getElementById('playButton');
 const previewDownloadButton = document.getElementById('previewDownloadButton');
@@ -58,9 +60,10 @@ class ScrollText {
 		this.paddingY = paddingY.value;
 		this.lineHeight = lineHeight.value;
 		this.fontFamily = textFontFamily.value;
+		this.fontStyle = fontStyle.value;
+		this.textAlignment = textAlignment.value;
 
 		this.interval = 1000/fps.value;
-		this.lastTimeStamp = 0;
 		this.timer = 0;
 
 		this.recorderState = 'initialized';
@@ -80,57 +83,54 @@ class ScrollText {
 	scroll(timeStamp) {				
 		
 		// setting default font if it is an empty
-		if (this.fontFamily == null || this.fontFamily == undefined) { this.fontFamily = 'Ysabeau Infant'; }		
+		if (this.fontFamily == null || this.fontFamily == undefined) { this.fontFamily = 'Ysabeau Infant'; }
 
-		// calculating delta time for uniform play in all other devices
-		const deltaTime = timeStamp - this.lastTimeStamp;
+		// clear everything in canvas before start next frame
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		
+		// fill background
+		ctx.fillStyle = this.backgroundColor;
+		ctx.fillRect(0, 0, canvas.width, canvas.height);	
 
-		// setting current time stamp for next animation frame
-		this.lastTimeStamp = timeStamp;	
+		let textFontStyle = this.fontStyle.replaceAll('underline', '').trim();
+		// setting font style
+		ctx.font = `${this.fontStyle} ${this.fontSize}px ${this.fontFamily}, san-serif`;	
+		
+		// setting initial y co-ordinate to be height of canvas			
+		this.y = this.currentY;
+		
+		// iterate through rearranged wrapped text for given details
+		for (const line of this.#wrappedText) {
 
-		// drawing when only timer is greater than the interval otherwise idle until timer gets reach
-		if (this.timer > this.interval) {
-
-			// clear everything in canvas before start next frame
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			// line length
+			let underlineLength = 0;
+			// scrolling text fill
+			ctx.fillStyle = this.textColor;
+			ctx.fillText(line, this.x, this.y);
 			
-			// fill background
-			ctx.fillStyle = this.backgroundColor;
-			ctx.fillRect(0, 0, canvas.width, canvas.height);	
-
-			// setting font style
-			ctx.font = `${this.fontSize}px ${this.fontFamily}, san-serif`;		
-			
-			// setting initial y co-ordinate to be height of canvas			
-			this.y = this.currentY;
-			
-			// iterate through rearranged wrapped text for given details
-			for (const line of this.#wrappedText) {
-
-				// scrolling text fill
+			// applying underline font style
+			if (this.fontStyle.indexOf('underline') !== -1) {
+				underlineLength = ctx.measureText(line);
 				ctx.fillStyle = this.textColor;
-				ctx.fillText(line, this.x, this.y);
-				
-				// increasing the y co-ordinate to move next line to visible area of canvas
-				this.y += parseInt(this.fontSize) + parseInt(this.lineHeight);
-				
-				// filling padding vertical area
-				ctx.fillStyle = this.backgroundColor;
-				ctx.fillRect(0, 0, canvas.width, this.paddingY/2);
-				ctx.fillRect(0, canvas.height - this.paddingY/2, canvas.width, this.paddingY/2);
-
+				ctx.fillRect(this.x, Number(this.y) + 15, underlineLength.width, 2);	
+				// reusing underlineLength as underline height
+				underlineLength = 17;
 			}
+			// increasing the y co-ordinate to move next line to visible area of canvas
+			this.y += Number(this.fontSize) + Number(this.lineHeight) + Number(underlineLength);
+			
+			// filling padding vertical area
+			ctx.fillStyle = this.backgroundColor;
+			ctx.fillRect(0, 0, canvas.width, this.paddingY/2);
+			ctx.fillRect(0, canvas.height - this.paddingY/2, canvas.width, this.paddingY/2);
 
-			// updating current y co-ordinate value 
-			this.currentY -= this.scrollSpeed;
-
-		} else {
-			// updating idle timer for requested fps 
-			this.timer += Math.floor(deltaTime);
 		}
 
+		// updating current y co-ordinate value 
+		this.currentY -= this.scrollSpeed;
+
 		// reset y co-ordinate to animate again
-		if (this.currentY + this.totalTextHeight + (this.paddingY) < 0 ) {
+		if (Number(this.currentY) + Number(this.totalTextHeight) + Number(this.paddingY) < 0 ) {
 			this.currentY = canvas.height;
 
 			// if this scroll animation request by recorder event then need to stop after completing animation
@@ -151,18 +151,21 @@ class ScrollText {
 	// calcTotalTextHeight method
 	calcTotalTextHeight() {
 		// calculating total height that going to occupy by processed text
-		this.totalTextHeight = parseFloat(this.paddingY);
+		this.totalTextHeight = Number(this.paddingY);
 		for (const line of this.#wrappedText) {
-			this.totalTextHeight += parseFloat(this.fontSize) + parseFloat(this.lineHeight);
+			this.totalTextHeight += Number(this.fontSize) + Number(this.lineHeight);
 		}
 	}
 	// wrapText method
 	wrapText() {
 		// getting input text split by new lines
 		let lines = this.inputText;
+
+		let textFontStyle = this.fontStyle.replaceAll('underline', '').trim();
 		
 		// assigning font style to calculate total width and height taken in the canvas
-		ctx.font = `${this.fontSize}px ${this.fontFamily}, san-serif`;	
+		// ctx.font = `${this.fontSize}px ${this.fontFamily}, san-serif`;
+		ctx.font = `${textFontStyle} ${this.fontSize}px ${this.fontFamily}, san-serif`;
 		
 		// created empty lines array to store new lines
 		let tempLines = [];
@@ -179,12 +182,12 @@ class ScrollText {
 			for (const word of words) {
 				// measuring text metrics inside canvas
 				const metrics = ctx.measureText(currentLine.join(' ') + word + ' ');
-				
 				// calculating line width taken inclusive of padding in horizontal
-				const lineWidth = metrics.width + this.paddingX;
+				const lineWidth = Number(metrics.width) + Number(this.paddingX);
 				
 				// if lines width is more than the allotted width then it will be a new line
 				if (lineWidth >= (canvas.width - this.paddingX)) {
+					
 					tempLines.push(currentLine.join(' '));
 					currentLine = [];
 				}

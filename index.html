@@ -39,9 +39,7 @@
 					
 					<div class="col form-group mb-3">
 						<label for="inputText">Input Text</label>
-						<textarea name="inputText" id="inputText" class="form-control" placeholder="Enter the text" rows="7" autofocus>
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-						</textarea>
+						<textarea name="inputText" id="inputText" class="form-control" placeholder="Enter the text" rows="7" autofocus>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</textarea>
 					</div>
 
 					<div class="col row">
@@ -112,6 +110,32 @@
 								<input type="text" name="textFontFamily" id="textFontFamily" class="form-control" value="Ysabeau Infant" placeholder="(e.g., 'Open Sans', 'Arial'):" />
 								<button class="btn btn-outline-primary my-0" type="button" id="setFontButton">Set Font</button>
 							</div>
+						</div>
+
+						<!-- Font Style -->
+						<div class="col-md-2 form-group mb-3">
+							<label for="fontStyle">Font Style</label>
+							<select name="fontStyle" id="fontStyle" class="form-control">
+								<option value="" selected>Normal</option>
+								<option value="bold">Bold</option>
+								<option value="italic">Italic</option>
+								<option value="underline">Underline</option>
+								<option value="bold italic">Bold & Italic</option>
+								<option value="bold underline">Bold & Underline</option>
+								<option value="italic underline">Italic & Underline</option>
+								<option value="bold italic underline">Bold, Italic & Underline</option>
+							</select>
+						</div>
+
+						<!-- Text Alignment -->
+						<div class="col-md-2 form-group mb-3">
+							<label for="textAlignment">Text Alignment</label>
+							<select name="textAlignment" id="textAlignment" class="form-control">
+								<option value="left" selected>Left</option>
+								<option value="center">Center</option>
+								<option value="right">Right</option>
+								<option value="justified">Justified</option>
+							</select>
 						</div>
 
 					</div>
