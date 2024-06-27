@@ -102,22 +102,94 @@ class ScrollText {
 		// iterate through rearranged wrapped text for given details
 		for (const line of this.#wrappedText) {
 
-			// line length
-			let underlineLength = 0;
+			// new temp line for processing and applying styles
+			let newTempLine = line;
+
+			// line width
+			let lineWidth = 0;
+
+			// underline height
+			let underlineHeight = 0;
+			
 			// scrolling text fill
 			ctx.fillStyle = this.textColor;
-			ctx.fillText(line, this.x, this.y);
+
+			// there is no text justified alignment
+			if (this.textAlignment != '') {
+				ctx.textAlign = (this.textAlignment != 'justified') ? this.textAlignment : 'left';
+			}
+			
+			// measuring actual wrapped text width metrics in canvas context
+			lineWidth = ctx.measureText(line).width;
+
+			// assigning x co-ordinates for right, center and justify text alignment 
+			if (this.textAlignment == 'right') {
+				this.x = (Number(this.x) + Number(canvas.width) - this.paddingX) / 2;
+			} else if (this.textAlignment == 'center') {
+				this.x = (Number(canvas.width)) / 2;
+			} else if (this.textAlignment == 'justified') {
+
+				// checking if it is an empty line
+				if (line.trim() != '') {
+
+					// getting free space width metrics
+					let noOfFreeSpaces = (canvas.width - this.paddingX) - lineWidth;
+
+					// proceeds only if any whitespace
+					if (line.indexOf(' ') !== -1) {
+
+						// getting number of whitespace in the line
+						let noOfWhiteSpaces = line.match(/([\s]+)/g).length;
+
+						// if it has atleast one whitespace to proceed
+						if (noOfFreeSpaces > 0) {
+							
+							// measuring single whitespace width metric for text style
+							let whiteSpaceWidth = ctx.measureText(' ').width;
+
+							// calculating new white space counts
+							let newWhiteSpaces = Math.ceil((noOfFreeSpaces / noOfWhiteSpaces) / whiteSpaceWidth);
+							
+							// appending and sharing equal whitespaces to all whitespaces in the line
+							let whiteSpaces = '';
+							for (let _i = 0; _i < newWhiteSpaces; _i++) {
+								whiteSpaces += ' ';
+							}
+
+							newTempLine = line.trim();
+							newTempLine = newTempLine.replace(/\s/g, whiteSpaces);
+						}						
+					}
+				}
+
+			}
+
+			// filling text to canvas context
+			ctx.fillText(newTempLine, this.x, this.y);
 			
 			// applying underline font style
 			if (this.fontStyle.indexOf('underline') !== -1) {
-				underlineLength = ctx.measureText(line);
-				ctx.fillStyle = this.textColor;
-				ctx.fillRect(this.x, Number(this.y) + 15, underlineLength.width, 2);	
-				// reusing underlineLength as underline height
-				underlineLength = 17;
+				// default co-ordinates will be followed for left text alignment	
+				let underlineX = this.x;
+				// measuring width metrics for new processed line text
+				lineWidth = ctx.measureText(newTempLine).width;
+				// setting underline color as same as text color
+				ctx.fillStyle = this.textColor;			
+				// underline x co-ordinate will be differs for right and center alignment
+				if (this.textAlignment == 'right') {
+					underlineX = (canvas.width - this.paddingX) - lineWidth;
+				} else if (this.textAlignment == 'center') {
+					underlineX = Number(this.x) - Number(lineWidth / 2);					
+				}			
+
+				// filling rectangular line as an underline below to text
+				ctx.fillRect(underlineX, Number(this.y) + 15, lineWidth, 2);	
+				// Setting Underline Height for next line y co-ordinate
+				underlineHeight = 17; // sum of 15 + 2
 			}
+			
 			// increasing the y co-ordinate to move next line to visible area of canvas
-			this.y += Number(this.fontSize) + Number(this.lineHeight) + Number(underlineLength);
+			this.y += Number(this.fontSize) + Number(this.lineHeight) + Number(underlineHeight);
 			
 			// filling padding vertical area
 			ctx.fillStyle = this.backgroundColor;
